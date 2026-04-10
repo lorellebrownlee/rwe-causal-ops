@@ -1,0 +1,134 @@
+schema: '2.0'
+stages:
+  generate_data:
+    cmd: python src/data/dgp.py
+    outs:
+    - path: data/raw/cohort.csv
+      hash: md5
+      md5: a5e225557143ef5d8ff5827bf6ee4cf9
+      size: 456498
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+    - path: data/raw/cohort.csv
+      hash: md5
+      md5: a5e225557143ef5d8ff5827bf6ee4cf9
+      size: 456498
+    outs:
+    - path: data/interim/cohort_clean.csv
+      hash: md5
+      md5: c568a5cfefe5974967b0d237fb9438c0
+      size: 455032
+    - path: data/interim/cohort_imputed.csv
+      hash: md5
+      md5: 4c742d38dbb841c5109d54821dbe9fd7
+      size: 462559
+  psm:
+    cmd: python src/methods/psm.py
+    deps:
+    - path: configs/psm.yaml
+      hash: md5
+      md5: e2d1c7debd64685d681e2a631339883e
+      size: 64
+    - path: data/interim/cohort_imputed.csv
+      hash: md5
+      md5: 4c742d38dbb841c5109d54821dbe9fd7
+      size: 462559
+    outs:
+    - path: results/psm_metrics.json
+      hash: md5
+      md5: 93d2d83f9a370819f28a920e43c625e6
+      size: 99
+  iptw:
+    cmd: python src/methods/iptw.py
+    deps:
+    - path: configs/iptw.yaml
+      hash: md5
+      md5: 1fb6943b23b2c8bd3a7f56ef35a15552
+      size: 58
+    - path: data/interim/cohort_imputed.csv
+      hash: md5
+      md5: 4c742d38dbb841c5109d54821dbe9fd7
+      size: 462559
+    outs:
+    - path: results/iptw_metrics.json
+      hash: md5
+      md5: c2f5893921de997e13c33f0be2618cc9
+      size: 99
+  aipw:
+    cmd: python src/methods/aipw.py
+    deps:
+    - path: configs/aipw.yaml
+      hash: md5
+      md5: 957f975c97b0e07df99a30ef4d9062cd
+      size: 131
+    - path: data/interim/cohort_imputed.csv
+      hash: md5
+      md5: 4c742d38dbb841c5109d54821dbe9fd7
+      size: 462559
+    outs:
+    - path: results/aipw_metrics.json
+      hash: md5
+      md5: 67fc0e9a97b359eb1bfb9b13c2f8f0c1
+      size: 151
+  survival:
+    cmd: python src/methods/survival.py
+    deps:
+    - path: data/interim/cohort_imputed.csv
+      hash: md5
+      md5: 4c742d38dbb841c5109d54821dbe9fd7
+      size: 462559
+    outs:
+    - path: results/survival_metrics.json
+      hash: md5
+      md5: 926a312494d7259badea49961af25e3c
+      size: 141
+  its:
+    cmd: python src/methods/its.py
+    deps:
+    - path: data/interim/cohort_imputed.csv
+      hash: md5
+      md5: 4c742d38dbb841c5109d54821dbe9fd7
+      size: 462559
+    outs:
+    - path: results/its_metrics.json
+      hash: md5
+      md5: bd9e7528e4dffb16a779ba29d8e68ba3
+      size: 144
+  did:
+    cmd: python src/methods/did.py
+    deps:
+    - path: data/interim/cohort_imputed.csv
+      hash: md5
+      md5: 4c742d38dbb841c5109d54821dbe9fd7
+      size: 462559
+    outs:
+    - path: results/did_metrics.json
+      hash: md5
+      md5: 5333dbade6b7070ba4b2ed84fa3f574c
+      size: 145
+  sensitivity:
+    cmd: python src/methods/sensitivity.py
+    deps:
+    - path: results/aipw_metrics.json
+      hash: md5
+      md5: 67fc0e9a97b359eb1bfb9b13c2f8f0c1
+      size: 151
+    outs:
+    - path: results/evalue_metrics.json
+      hash: md5
+      md5: fc36fe508cda8248016ab015a483ad1a
+      size: 201
+  report:
+    cmd: python src/reporting/generate_report.py
+    deps:
+    - path: results/
+      hash: md5
+      md5: 191073f840d828568bf8f813225433ee.dir
+      size: 1116
+      nfiles: 8
+    outs:
+    - path: reports/comparison_report.html
+      hash: md5
+      md5: 5adf9b1b3d50b6c65f24440d72e17d3a
+      size: 4083

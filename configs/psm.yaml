@@ -1,0 +1,3 @@
+caliper: 0.2
+matching: "1:1 nearest neighbour"
+n_bootstrap: 500

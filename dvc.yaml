@@ -1,0 +1,61 @@
+stages:
+  generate_data:
+    cmd: python src/data/dgp.py
+    outs:
+      - data/raw/cohort.csv
+
+  preprocess:
+    cmd: python src/data/preprocess.py
+    deps:
+      - data/raw/cohort.csv
+    outs:
+      - data/interim/cohort_clean.csv
+      - data/interim/cohort_imputed.csv
+
+  psm:
+    cmd: python src/methods/psm.py
+    deps:
+      - data/interim/cohort_imputed.csv
+      - configs/psm.yaml
+    metrics: [results/psm_metrics.json]
+
+  iptw:
+    cmd: python src/methods/iptw.py
+    deps:
+      - data/interim/cohort_imputed.csv
+      - configs/iptw.yaml
+    metrics: [results/iptw_metrics.json]
+
+  aipw:
+    cmd: python src/methods/aipw.py
+    deps:
+      - data/interim/cohort_imputed.csv
+      - configs/aipw.yaml
+    metrics: [results/aipw_metrics.json]
+
+  survival:
+    cmd: python src/methods/survival.py
+    deps: [data/interim/cohort_imputed.csv]
+    metrics: [results/survival_metrics.json]
+
+  its:
+    cmd: python src/methods/its.py
+    deps: [data/interim/cohort_imputed.csv]
+    metrics: [results/its_metrics.json]
+
+  did:
+    cmd: python src/methods/did.py
+    deps: [data/interim/cohort_imputed.csv]
+    metrics: [results/did_metrics.json]
+
+  sensitivity:
+    cmd: python src/methods/sensitivity.py
+    deps: [results/aipw_metrics.json]
+    metrics: [results/evalue_metrics.json]
+
+  report:
+    cmd: python src/reporting/generate_report.py
+    deps:
+      - results/
+    outs:
+      - reports/comparison_report.html

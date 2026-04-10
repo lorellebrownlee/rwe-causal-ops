@@ -1,0 +1,4 @@
+propensity_model: "GradientBoostingClassifier"
+outcome_model: "GradientBoostingRegressor"
+n_estimators: 100
+cross_fitting_folds: 5

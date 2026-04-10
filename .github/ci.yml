@@ -1,0 +1,44 @@
+name: RWE Causal Pipeline
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run DVC pipeline
+        run: dvc repro
+
+      - name: Run all causal methods
+        run: |
+          python src/methods/psm.py
+          python src/methods/iptw.py
+          python src/methods/aipw.py
+          python src/methods/survival.py
+          python src/methods/its.py
+          python src/methods/did.py
+          python src/methods/sensitivity.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: causal-results
+          path: results/
