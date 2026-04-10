@@ -24,6 +24,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Create data directories
+        run: mkdir -p data/raw data/interim results reports
+
       - name: Run DVC pipeline
         run: dvc repro
 
