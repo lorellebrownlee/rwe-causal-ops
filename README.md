@@ -5,6 +5,7 @@
 [![DVC](https://img.shields.io/badge/pipeline-DVC-945DD6.svg)](https://dvc.org/)
 [![MLflow](https://img.shields.io/badge/tracking-MLflow-0194E2.svg)](https://mlflow.org/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Docker](https://img.shields.io/badge/container-Docker-2496ED.svg)](https://www.docker.com/)
 
 A production-grade **Real World Evidence (RWE) causal inference pipeline** implementing 7 causal methods on synthetic observational data. Built with MLOps best practices: reproducible pipelines (DVC), experiment tracking (MLflow), automated quality gates (pre-commit), and CI/CD (GitHub Actions).
 
@@ -120,6 +121,19 @@ python src/methods/aipw.py
 mlflow ui
 # → open http://127.0.0.1:5000
 ```
+
+---
+
+## Docker
+
+Run the full pipeline and explore results in the MLflow UI without any local setup:
+
+```bash
+docker build -t rwe-causal-ops .
+docker run -p 5000:5000 rwe-causal-ops bash -c "dvc repro --force && mlflow ui --host 0.0.0.0 --port 5000"
+```
+
+Then open `http://localhost:5000` to browse all 7 method runs side by side.
 
 ---
 
