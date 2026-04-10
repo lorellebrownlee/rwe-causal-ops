@@ -58,15 +58,15 @@ flowchart TD
 
 ## Methods
 
-| Method | Assumption | Key strength |
-|---|---|---|
-| **PSM** | Ignorability given propensity score | Intuitive, matched pairs |
-| **IPTW** | Positivity + ignorability | Uses full sample, no matching discard |
-| **AIPW** | Either outcome or PS model correct | Doubly robust — preferred estimator |
-| **Survival (KM/Cox)** | Non-informative censoring | Handles time-to-event outcomes |
-| **ITS** | Parallel counterfactual trend | Exploits temporal discontinuity |
-| **DiD** | Parallel trends | Controls for time-invariant confounding |
-| **E-value** | None (sensitivity) | Quantifies unmeasured confounding threat |
+| Method | What it does | When you'd use it | Key assumption |
+|---|---|---|---|
+| **PSM** (Propensity Score Matching) | Matches each treated patient to a similar untreated patient based on their probability of receiving treatment | When you want an intuitive "apples to apples" comparison | All confounders are measured |
+| **IPTW** (Inverse Probability of Treatment Weighting) | Reweights patients so the treated and untreated groups look similar, without discarding anyone | When you want to use the full dataset rather than matched pairs | All confounders are measured, everyone has a realistic chance of either treatment |
+| **AIPW** (Doubly Robust) | Combines a propensity score model and an outcome model — if either one is correct, the estimate is valid | When you want the most robust ATE estimate | At least one of the two models is correctly specified |
+| **Survival Analysis** (KM + Cox) | Models time-to-event outcomes (e.g. time to death or hospitalisation) accounting for patients who haven't experienced the event yet | When the outcome is time-based, not just yes/no | Patients who leave the study early drop out randomly |
+| **ITS** (Interrupted Time Series) | Looks at whether a trend in outcomes changed after a treatment or policy was introduced | When treatment was rolled out at a specific point in time | The pre-treatment trend would have continued unchanged |
+| **DiD** (Difference-in-Differences) | Compares the change over time in a treated group vs. an untreated group | When you have data before and after treatment for both groups | Both groups would have followed parallel trends without treatment |
+| **E-value Sensitivity Analysis** | Asks: "how strong would an unmeasured confounder need to be to explain away our result?" | After any causal analysis, to stress-test the findings | None — this is a robustness check, not a causal method |
 
 ---
 
