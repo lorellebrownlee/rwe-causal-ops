@@ -70,32 +70,33 @@ flowchart TD
 ---
 
 ## Project Structure
+
+```
 rwe-causal-ops/
 ├── src/
-│ ├── data/
-│ │ ├── dgp.py # Synthetic data generating process
-│ │ └── preprocess.py # Pandera validation + MICE imputation
-│ ├── methods/
-│ │ ├── psm.py # Propensity score matching
-│ │ ├── iptw.py # Inverse probability weighting
-│ │ ├── aipw.py # Doubly robust AIPW
-│ │ ├── survival.py # Kaplan-Meier + Cox PH
-│ │ ├── its.py # Interrupted time series
-│ │ ├── did.py # Difference-in-differences
-│ │ └── sensitivity.py # E-value analysis
-│ └── reporting/
-│ └── generate_report.py # HTML report + forest plot
-├── configs/ # Per-method YAML configs
-├── data/interim/ # Processed data (DVC-tracked)
-├── results/ # JSON metrics per method
-├── reports/ # Forest plot + HTML report
-├── dvc.yaml # Pipeline DAG
-├── params.yaml # Global parameters
-├── .github/workflows/ci.yml # GitHub Actions CI
-├── .pre-commit-config.yaml # black, flake8, isort
+│   ├── data/
+│   │   ├── dgp.py              # Synthetic data generating process
+│   │   └── preprocess.py       # Pandera validation + MICE imputation
+│   ├── methods/
+│   │   ├── psm.py              # Propensity score matching
+│   │   ├── iptw.py             # Inverse probability weighting
+│   │   ├── aipw.py             # Doubly robust AIPW
+│   │   ├── survival.py         # Kaplan-Meier + Cox PH
+│   │   ├── its.py              # Interrupted time series
+│   │   ├── did.py              # Difference-in-differences
+│   │   └── sensitivity.py      # E-value analysis
+│   └── reporting/
+│       └── generate_report.py  # HTML report + forest plot
+├── configs/                    # Per-method YAML configs
+├── data/interim/               # Processed data (DVC-tracked)
+├── results/                    # JSON metrics per method
+├── reports/                    # Forest plot + HTML report
+├── dvc.yaml                    # Pipeline DAG
+├── params.yaml                 # Global parameters
+├── .github/workflows/ci.yml    # GitHub Actions CI
+├── .pre-commit-config.yaml     # black, flake8, isort
 └── requirements.txt
-
-text
+```
 
 ---
 
